@@ -19,10 +19,11 @@ public class UserDaoJDBCImpl implements UserDao {
 
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("create table if not exists users" +
-                    "(id BIGINT NOT NULL AUTO_INCREMENT," +
-                    " name VARCHAR(50)," +
-                    " surname VARCHAR(50)," +
-                    " age DOUBLE, PRIMARY KEY (id))");
+                    "(id INT NOT NULL auto_increment," +
+                    "name VARCHAR(50)," +
+                    "surname VARCHAR(50)," +
+                    " age SMALLINT," +
+                    " PRIMARY KEY (id))");
             System.out.println("Table created");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,7 +46,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
-            preparedStatement.setDouble(3, age);
+            preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
             System.out.println("User with name " + name + " has been saved");
         } catch (SQLException e) {
@@ -55,9 +56,11 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
 
-        String sql = "DELETE FROM users WHERE id ";
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
+
+        String sql = "DELETE FROM users WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1,id);
+            statement.executeUpdate();
             System.out.println("User with id " + id + " has been removed");
         } catch (SQLException e) {
             e.printStackTrace();
