@@ -24,10 +24,10 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = session.beginTransaction();
         try {
             session.createNativeQuery("create table if not exists users" +
-                    "(id BIGINT NOT NULL AUTO_INCREMENT," +
+                    "(id INT NOT NULL AUTO_INCREMENT," +
                     " name VARCHAR(50)," +
                     " surname VARCHAR(50)," +
-                    " age DOUBLE, PRIMARY KEY (id))").executeUpdate();
+                    " age SMALLINT, PRIMARY KEY (id))").executeUpdate();
             transaction.commit();
             System.out.println("Table created");
         } catch (HibernateException e) {
